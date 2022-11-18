@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1 class="home">Coffee List</h1>
+
+{% for coffee in coffees %}
+<div class="card">
+  <a href="{% url 'detail' coffee.id %}" id="link">
+    <div class="card-content brown-text text-lighten-2">
+      <span class="card-title">{{ coffee.name }}</span>
+      <p>Type: {{ coffee.type }}</p>
+      <p>Size: {{ coffee.size }}</p>
+      <p>Price: ${{ coffee.price}}</p>
+      <p>Description: {{ coffee.description }}</p>
+    </div>
+  </a>
+</div>
+{% endfor %} {% endblock %}

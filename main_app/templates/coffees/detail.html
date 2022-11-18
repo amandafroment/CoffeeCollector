@@ -1,0 +1,92 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Coffee Details</h1>
+
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ coffee.name }}</span>
+        <p>Type: {{ coffee.type }}</p>
+        <p>Size: {{ coffee.size }}</p>
+        <p>Price: ${{ coffee.price}}</p>
+        <p>Description: {{ coffee.description }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'coffees_update' coffee.id %}">Edit</a>
+        <a href="{% url 'coffees_delete' coffee.id %}">Delete</a>
+      </div>
+    </div>
+  </div>
+  <div class="col s6">
+    <form action="{% url 'add_location' coffee.id %}" method="post">
+      {% csrf_token %} {{ location_form.as_p }}
+      <input type="submit" class="btn" value="Add Location" />
+    </form>
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for location in coffee.location_set.all %}
+        <tr>
+          <td>{{location.date}}</td>
+          <td>{{location.get_locations_display}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<hr />
+<div class="row">
+  <div class="col s6">
+    <h3>{{ coffee.name }}'s Ratings</h3>
+    {% if coffee.ratings.count %} {% for rating in coffee.ratings.all %}
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title"> {{ rating.name }} </span>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <h5>No Ratings Yet!</h5>
+    {% endif %}
+  </div>
+  <!-- Available toys will come after this line -->
+  <div class="col s6">
+    <h3>Available Ratings</h3>
+    {% if ratings.count %} {% for rating in ratings.all %}
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title"> {{ rating.name }} </span>
+      </div>
+      <div class="card-action">
+        <form
+          action="{% url 'assoc_rating' coffee.id rating.id %}"
+          method="post"
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn">Add</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <h5>{{coffee.name}} Already Has All Ratings Available</h5>
+    {% endif %}
+  </div>
+</div>
+<script>
+  var dateEl = document.getElementById("id_date");
+  M.Datepicker.init(dateEl, {
+    format: "yyyy-mm-dd",
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true,
+  });
+  var selectEl = document.getElementById("id_locations");
+  M.FormSelect.init(selectEl);
+</script>
+{% endblock %}

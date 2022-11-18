@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Ratings List</h1>
+
+{% for rating in rating_list %}
+<a href="{% url 'ratings_detail' rating.id %}">
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">{{ rating.name }}</span>
+    </div>
+  </div>
+</a>
+{% endfor %} {% endblock %}
